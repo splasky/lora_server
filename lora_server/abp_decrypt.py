@@ -1,15 +1,19 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# Last modified: 2017-06-26 15:13:42
+# Last modified: 2017-06-27 00:10:52
 
 from Crypto.Cipher import AES
 import binascii
 
 
-class decodePHYpayload:
+def convert_bytes_to_str(converted: bytes)->str:
+    return bytes(converted).decode('utf-8')
 
-    def __init__(self, PHYpayload: str, key: str) -> None:
+
+class decodePHYpayload(object):
+
+    def __init__(self, PHYpayload, key):
         """
         name       type
         PHYpayload str
@@ -17,14 +21,18 @@ class decodePHYpayload:
         """
 
         print(PHYpayload)
-        self.addr = PHYpayload[2:10]
-        self.FCnt = PHYpayload[12:16]
-        self.data = PHYpayload[18:-8]
-        self.MIC = PHYpayload[-8:]
+        self.addr = convert_bytes_to_str(PHYpayload[2:10])
+        self.FCnt = convert_bytes_to_str(PHYpayload[12:16])
+
+        self.data = convert_bytes_to_str(PHYpayload[18:-8])
+        self.MIC = convert_bytes_to_str(PHYpayload[-8:])
+
         self.appkey = binascii.unhexlify(key)
 
-        Ablock = "0100000000" + "00" + self.addr + self.FCnt + "0000" + "0001"
-        self.Ablock = Ablock
+        hex_header = '010000000000'
+        tail = '00000001'
+
+        self.Ablock = hex_header + self.addr + self.FCnt + tail
 
     def getdata(self):
         """
@@ -33,11 +41,12 @@ class decodePHYpayload:
         en = AES.new(self.appkey, AES.MODE_ECB)
         Ablock = self.Ablock
         print(Ablock)
+
         hex_Ablock = binascii.unhexlify(Ablock)
         enA = en.encrypt(hex_Ablock)
+
         hex_data = binascii.unhexlify(self.data)
         b_data = bytearray(hex_data)
-        print(enA.encode("hex"))
         b_enA = bytearray(enA)
         s = ""
 
@@ -45,3 +54,14 @@ class decodePHYpayload:
             s += hex(b_data[i] ^ b_enA[i])[2:]
 
         return s
+
+
+def main(payload, key):
+    descrypt = decodePHYpayload(payload, key)
+    print(descrypt.getdata())
+
+
+if __name__ == "__main__":
+    payload = b'40785634128003000a6f30008fab3f'
+    key = b'2b7e151628aed2a6abf7158809cf4f3c'
+    main(payload, key)

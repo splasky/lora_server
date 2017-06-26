@@ -1,9 +1,7 @@
 # lora_server
 
-pip install
-Crypto
-binascii
-
-abp_decrypt.py
-
+# require packages
+```
+pip install Crypto paho-mqtt 
+```
 

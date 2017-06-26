@@ -1,8 +1,9 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# Last modified: 2017-06-26 16:40:49
+# Last modified: 2017-06-26 16:50:59
 
+from abp_decrypt import decodePHYpayload
 import paho.mqtt.client as mqtt
 import json
 import base64
@@ -24,6 +25,10 @@ def on_message(client, userdata, msg):
 
     print(get_data)
     print(base64.b64decode(get_data))
+
+    decrypt = decodePHYpayload(base64.b64decode(get_data),
+                               str('2b7e151628aed2a6abf7158809cf4f3c'))
+    print(decrypt.getdata())
 
 
 def main():

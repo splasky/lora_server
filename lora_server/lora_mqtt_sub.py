@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# Last modified: 2017-06-26 15:14:22
+# Last modified: 2017-06-26 16:40:49
 
 import paho.mqtt.client as mqtt
 import json
@@ -14,9 +14,12 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.topic + "  msg " + msg.payload)
-    jdata = json.loads(msg.payload)
-    # print jdata
+
+    # convert to string
+
+    print(str(msg.topic) + " msg " + str(msg.payload))
+
+    jdata = json.loads(str(msg.payload, 'ascii'))
     get_data = jdata["data"]
 
     print(get_data)

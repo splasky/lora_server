@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# Last modified: 2017-06-27 00:10:52
+# Last modified: 2017-06-27 00:39:16
 
 from Crypto.Cipher import AES
 import binascii
@@ -54,14 +54,3 @@ class decodePHYpayload(object):
             s += hex(b_data[i] ^ b_enA[i])[2:]
 
         return s
-
-
-def main(payload, key):
-    descrypt = decodePHYpayload(payload, key)
-    print(descrypt.getdata())
-
-
-if __name__ == "__main__":
-    payload = b'40785634128003000a6f30008fab3f'
-    key = b'2b7e151628aed2a6abf7158809cf4f3c'
-    main(payload, key)

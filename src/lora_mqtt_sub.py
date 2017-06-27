@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-# Last modified: 2017-06-26 16:50:59
+# Last modified: 2017-06-27 00:42:01
 
 from abp_decrypt import decodePHYpayload
 import paho.mqtt.client as mqtt
@@ -14,7 +14,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("lora/rxpk")
 
 
-def on_message(client, userdata, msg):
+def on_message(client, userdata, msg, key='2b7e151628aed2a6abf7158809cf4f3c'):
 
     # convert to string
 
@@ -27,7 +27,7 @@ def on_message(client, userdata, msg):
     print(base64.b64decode(get_data))
 
     decrypt = decodePHYpayload(base64.b64decode(get_data),
-                               str('2b7e151628aed2a6abf7158809cf4f3c'))
+                               str(key))
     print(decrypt.getdata())
 
 

@@ -1,9 +1,10 @@
 # lora_server
+Receive message from lora device.
 
-pip install
-Crypto
-binascii
+# require packages
+```
+pip install Crypto paho-mqtt 
+```
 
-abp_decrypt.py
-
-
+# python version
+python3.5
